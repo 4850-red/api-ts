@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+    head
+        title Demo
+        style
+            include demo.css
+    body
+        div.container
+            input(type="range" min="1" max="254" oninput="postMotor()")#head
+        div.container
+            button.gangnam Gangnam Style
+        div.container
+            button#stop STOP
+        script. 
+            function postMotor() {
+                let val = document.getElementById("head").value
+                let postURL = `motor/23/${val}`
+                console.log(postURL)
+                fetch(postURL, {
+                    method: "GET",
+                    headers: {'Content-Type': 'application/json'}, 
+                    }).then(res => {
+                    console.log("Request complete! response:", res);
+                })
+            }
