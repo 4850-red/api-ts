@@ -1,39 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
 import { Motor } from '@/interfaces/motor.interface';
-import MotorService from '@/services/motors.service';
-import rclnodejs, { Publisher, MessageType } from 'rclnodejs'
-
-const nodeName = 'api_node'
-var node: rclnodejs.Node
-var motorPub
-
-rclnodejs.init()
-.then(() => {
-  console.log('[ROS2] Connection Successful')
-
-  // this creates a new node, has the node every second publish to 
-
-  // creates new node
-  node = new rclnodejs.Node(nodeName) 
-
-  // creates a publisher
-  const msgType: MessageType<any> = 'uxa_sam_msgs/msg/PositionMove'
-  const topic = 'uxa_sam_driver/position_move'
-  motorPub = node.createPublisher(msgType, topic)
-  
-  
-  // runs the node
-  node.spinOnce()
-
-})
-.catch(err => {
-  console.log('[ROS2] Connection Failed')
-  console.error(err)
-})
-
+import MotorService from '@/services/motors.service'
+import { Publisher, Node} from 'rclnodejs'
 
 class MotorsController {
+
+
   public motorService = new MotorService();
+
+  // ROS2 Node: api_node
+  // Publisher: Motor
+  public node: Node
+  public pub: Publisher
+
+  // gets node/publisher from route
+  constructor(node: Node, pub: Publisher){
+    this.node = node
+    this.pub = pub
+  }
 
   public getMotors = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -67,11 +51,9 @@ class MotorsController {
         pos: newMotorPos,
         torqlevel: 1
       }
-      console.log(motorMsg)
 
-      motorPub.publish(motorMsg)
-
-      node.spinOnce()
+      this.pub.publish(motorMsg)
+      this.node.spinOnce()
 
       res.status(200).json({ data: findOneMotorData, message: 'findOne' , smile: newMotorPos})
 
