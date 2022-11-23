@@ -22,7 +22,7 @@ const motionTopic = 'uic_driver_motion'
 
 var motorClient: Client<any>
 
-const motorServiceMap: ServicesMap<any> = 'uxa_sam_msgs/srv/MultiMove'
+const motorServiceMap: any = 'uxa_sam_msgs/srv/MultiMove'
 const motorServiceName: string = 'uxa_sam_driver/services/multimove'
 
 process.on('SIGINT', () => {
@@ -41,8 +41,8 @@ rclnodejs.init()
   motorPublisher = node.createPublisher(motorMsgType, motorTopic)
   motionPublisher = node.createPublisher(motionMsgType, motionTopic)
 
-  motorClient = node.createClient(motorServiceMap, motorServiceName, )
-  
+  motorClient = node.createClient(motorServiceMap, motorServiceName)
+
   // runs the node
   node.spinOnce()
 
