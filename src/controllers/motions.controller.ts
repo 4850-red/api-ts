@@ -36,8 +36,6 @@ class MotionsController {
         motion_name: motionName
       }
 
-      console.log(findOneMotionData)
-
       this.pub.publish(motionMsg)
       this.node.spinOnce()
 
@@ -59,13 +57,10 @@ class MotionsController {
     }
   }
 
-
   public getMotionByName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       let motionName: String = req.params.key;
       const findOneMotionData: Motion = await this.motionService.findMotionByName(motionName);
-
-      console.log(findOneMotionData)
 
       let motionMsg = {
         motion_name: motionName

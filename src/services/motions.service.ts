@@ -13,7 +13,6 @@ class MotionService {
 
   // called from getMotionById in motions.controller
   public async findMotionById(motionId: number): Promise<Motion> {
-    console.log(`motionId: ${motionId}`)
     const findMotion: Motion = this.motions.find(motion => motion.id === motionId)
     if (!findMotion) throw new HttpException(409, "Motion doesn't exist")
 
@@ -22,7 +21,6 @@ class MotionService {
 
   // called from getMotionByName in motions.controller
   public async findMotionByName(motionName: String): Promise<Motion> {
-    console.log(`motionName: ${motionName}`)
     const findMotion: Motion = this.motions.find(motion => motion.name.toLowerCase() === motionName.toLowerCase());
     if (!findMotion) throw new HttpException(409, "Motion doesn't exist")
 

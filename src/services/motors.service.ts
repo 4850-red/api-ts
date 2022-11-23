@@ -6,11 +6,13 @@ import { isEmpty } from '@utils/util';
 class MotorService {
   public motors = motorModel;
 
+  // called by getMotors in motors.controller
   public async findAllMotors(): Promise<Motor[]> {
     const motors: Motor[] = this.motors;
     return motors;
   }
 
+  // called by getMotorById in motors.controller
   public async findMotorById(motorId: number): Promise<Motor> {
     const findMotor: Motor = this.motors.find(motor => motor.id === motorId);
     if (!findMotor) throw new HttpException(409, "Motor doesn't exist");

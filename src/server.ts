@@ -6,7 +6,7 @@ import validateEnv from '@utils/validateEnv';
 import DemoRoute from './routes/demo.route';
 validateEnv();
 
-import rclnodejs, { Publisher, MessageType, Node} from 'rclnodejs'
+import rclnodejs, { Publisher, MessageType, ActionClient, Node} from 'rclnodejs'
 
 const nodeName = 'api_node'
 var node: Node
@@ -19,6 +19,8 @@ const motorTopic = 'uxa_sam_driver/position_move'
 
 const motionMsgType: MessageType<any> = 'uxa_uic_msgs/msg/Motion'
 const motionTopic = 'uic_driver_motion'
+
+var motorClient: ActionClient<any>
 
 process.on('SIGINT', () => {
   console.log("SIGTERM RECEIVED, EXITING");
@@ -36,6 +38,7 @@ rclnodejs.init()
   motorPublisher = node.createPublisher(motorMsgType, motorTopic)
   motionPublisher = node.createPublisher(motionMsgType, motionTopic)
 
+  motorClient = new ActionClient(node, motionMsgType, motorTopic)
   // runs the node
   node.spinOnce()
 
@@ -45,7 +48,7 @@ rclnodejs.init()
   console.error(err)
 }).then(() => {
   try {
-    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher), new MotionsRoute(node, motionPublisher), new DemoRoute()]);
+    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher, motorClient), new MotionsRoute(node, motionPublisher), new DemoRoute()]);
     app.listen();
   } catch(e) {
     console.error(e)

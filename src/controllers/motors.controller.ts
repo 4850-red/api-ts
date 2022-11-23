@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Motor } from '@/interfaces/motor.interface';
 import MotorService from '@/services/motors.service'
-import { Publisher, Node} from 'rclnodejs'
+import { Publisher, Node, ActionClient} from 'rclnodejs'
 
 class MotorsController {
 
@@ -12,11 +12,13 @@ class MotorsController {
   // Publisher: Motor
   public node: Node
   public pub: Publisher<any>
+  public client: ActionClient<any>
 
   // gets node/publisher from route
-  constructor(node: Node, pub: Publisher<any>){
+  constructor(node: Node, pub: Publisher<any>, client: ActionClient<any>){
     this.node = node
     this.pub = pub
+    this.client = client
   }
 
   public getMotors = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -52,7 +54,23 @@ class MotorsController {
         torqlevel: 1
       }
 
-      this.pub.publish(motorMsg)
+      let motorMsg2 = {
+        id: 5,
+        pos: 500,
+        torqlevel: 1
+      }
+
+      let motorMsg3 = {
+        id: 10,
+        pos: 100,
+        torqlevel: 1
+      }
+
+      this.client.sendGoal([motorMsg, motorMsg2, motorMsg3], (feedback) => {
+        console.log(feedback)
+      })
+
+      // this.pub.publish(motorMsg)
       this.node.spinOnce()
 
       res.status(200).json({ data: findOneMotorData, message: 'findOne' , smile: newMotorPos})
@@ -62,7 +80,5 @@ class MotorsController {
     }
   }
 }
-
-
 
 export default MotorsController;

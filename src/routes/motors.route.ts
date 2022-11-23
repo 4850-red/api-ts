@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import MotorsController from '@/controllers/motors.controller';
 import { Routes } from '@interfaces/routes.interface';
-import { Publisher, Node} from 'rclnodejs'
+import { Publisher, Node, ActionClient} from 'rclnodejs'
 
 class MotorsRoute implements Routes {
   public path = '/motor';
@@ -10,8 +10,8 @@ class MotorsRoute implements Routes {
 
   // sets up routes and controllers
   // gets ROS2 node/publisher from server
-  constructor(node: Node, pub: Publisher<any>) {
-    this.motorsController = new MotorsController(node, pub);
+  constructor(node: Node, pub: Publisher<any>, client: ActionClient<any>) {
+    this.motorsController = new MotorsController(node, pub, client);
     this.initializeRoutes();
   }
 
