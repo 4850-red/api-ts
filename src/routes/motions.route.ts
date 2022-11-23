@@ -17,7 +17,7 @@ class MotorsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.motionsController.getMotions)
-    this.router.get(`${this.path}/:id(\\d+)`, this.motionsController.getMotionById)
+    this.router.get(`${this.path}/:key`, this.motionsController.getMotionByKey)
   }
 }
 

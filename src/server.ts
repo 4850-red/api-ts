@@ -11,8 +11,8 @@ import rclnodejs, { Publisher, MessageType, Node} from 'rclnodejs'
 const nodeName = 'api_node'
 var node: Node
 
-var motorPublisher: Publisher
-var motionPublisher: Publisher
+var motorPublisher: Publisher<any>
+var motionPublisher: Publisher<any>
 
 const motorMsgType: MessageType<any> = 'uxa_sam_msgs/msg/PositionMove'
 const motorTopic = 'uxa_sam_driver/position_move'

@@ -11,10 +11,10 @@ class MotorsController {
   // ROS2 Node: api_node
   // Publisher: Motor
   public node: Node
-  public pub: Publisher
+  public pub: Publisher<any>
 
   // gets node/publisher from route
-  constructor(node: Node, pub: Publisher){
+  constructor(node: Node, pub: Publisher<any>){
     this.node = node
     this.pub = pub
   }
