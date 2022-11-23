@@ -38,9 +38,13 @@ rclnodejs.init()
 .catch(err => {
   console.log('[ROS2] Connection Failed')
   console.error(err)
+}).then(() => {
+  try {
+    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher), new MotionsRoute(node, motionPublisher), new DemoRoute()]);
+    app.listen();
+  } catch(e) {
+    console.error(e)
+  }
 })
 
 
-const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher), new MotionsRoute(node, motionPublisher), new DemoRoute()]);
-
-app.listen();

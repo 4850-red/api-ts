@@ -11,8 +11,8 @@ class MotorsRoute implements Routes {
   // sets up routes and controllers
   // gets ROS2 node/publisher from server
   constructor(node: Node, pub: Publisher) {
+    this.motorsController = new MotorsController(node, pub);
     this.initializeRoutes();
-    this.motorsController = new MotorsController(node, pub)
   }
 
   private initializeRoutes() {

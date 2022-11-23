@@ -10,6 +10,7 @@ class MotionsController {
 
   constructor(node: Node, pub: Publisher) {
     this.pub = pub
+    this.node = node
   }
 
   public motionService = new motionService();
