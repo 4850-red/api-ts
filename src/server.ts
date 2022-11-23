@@ -6,7 +6,7 @@ import validateEnv from '@utils/validateEnv';
 import DemoRoute from './routes/demo.route';
 validateEnv();
 
-import rclnodejs, { Publisher, MessageType, ActionClient, Node} from 'rclnodejs'
+import rclnodejs, { Publisher, MessageType, Client, Node, ServicesMap} from 'rclnodejs'
 
 const nodeName = 'api_node'
 var node: Node
@@ -20,7 +20,10 @@ const motorTopic = 'uxa_sam_driver/position_move'
 const motionMsgType: MessageType<any> = 'uxa_uic_msgs/msg/Motion'
 const motionTopic = 'uic_driver_motion'
 
-var motorClient: ActionClient<any>
+var motorClient: Client<any>
+
+const motorServiceMap: ServicesMap<any> = 'uxa_sam_msgs/srv/MultiMove'
+const motorServiceName: string = 'uxa_sam_driver/services/multimove'
 
 process.on('SIGINT', () => {
   console.log("SIGTERM RECEIVED, EXITING");
@@ -38,7 +41,8 @@ rclnodejs.init()
   motorPublisher = node.createPublisher(motorMsgType, motorTopic)
   motionPublisher = node.createPublisher(motionMsgType, motionTopic)
 
-  motorClient = new ActionClient(node, motionMsgType, motorTopic)
+  motorClient = node.createClient(motorServiceMap, motorServiceName, )
+  
   // runs the node
   node.spinOnce()
 

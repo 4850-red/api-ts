@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Motor } from '@/interfaces/motor.interface';
 import MotorService from '@/services/motors.service'
-import { Publisher, Node, ActionClient} from 'rclnodejs'
+import { Publisher, Node, Client} from 'rclnodejs'
 
 class MotorsController {
 
@@ -12,10 +12,10 @@ class MotorsController {
   // Publisher: Motor
   public node: Node
   public pub: Publisher<any>
-  public client: ActionClient<any>
+  public client: Client<any>
 
   // gets node/publisher from route
-  constructor(node: Node, pub: Publisher<any>, client: ActionClient<any>){
+  constructor(node: Node, pub: Publisher<any>, client: Client<any>){
     this.node = node
     this.pub = pub
     this.client = client
@@ -66,9 +66,14 @@ class MotorsController {
         torqlevel: 1
       }
 
-      this.client.sendGoal([motorMsg, motorMsg2, motorMsg3], (feedback) => {
-        console.log(feedback)
-      })
+      this.client.sendRequest(
+        {
+        positions: [
+          motorMsg, motorMsg2, motorMsg3
+        ]
+        }, (response) => {
+          console.log(response)
+        })
 
       // this.pub.publish(motorMsg)
       this.node.spinOnce()
