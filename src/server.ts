@@ -20,6 +20,11 @@ const motorTopic = 'uxa_sam_driver/position_move'
 const motionMsgType: MessageType<any> = 'uxa_uic_msgs/msg/Motion'
 const motionTopic = 'uic_driver_motion'
 
+process.on('SIGINT', () => {
+  console.log("SIGTERM RECEIVED, EXITING");
+  process.exit(0);
+})
+
 rclnodejs.init()
 .then(() => {
   console.log('[ROS2] Connection Successful')
