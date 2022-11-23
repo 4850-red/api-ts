@@ -6,9 +6,9 @@ import { Publisher, Node} from 'rclnodejs'
 class MotionsController {
 
   public node: Node
-  public pub: Publisher
+  public pub: Publisher<any>
 
-  constructor(node: Node, pub: Publisher) {
+  constructor(node: Node, pub: Publisher<any>) {
     this.pub = pub
     this.node = node
   }
@@ -44,6 +44,26 @@ class MotionsController {
       next(error);
     }
   };
+
+  public getMotionByName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const motionId = Number(req.params.id);
+      const findOneMotionData: Motion = await this.motionService.findMotionByName(motionName);
+
+      let motionName: String = findOneMotionData.name
+
+      let motionMsg = {
+        motion_name: motionName
+      }
+
+      this.pub.publish(motionMsg)
+      this.node.spinOnce()
+
+      res.status(200).json({ data: findOneMotionData, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  }
 
 }
 
