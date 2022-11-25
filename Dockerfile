@@ -6,6 +6,6 @@ COPY . .
 
 RUN apt-get update && apt-get install -y curl && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/* && npm install -g npm
 
-RUN npm install
+RUN npm ci
 
 CMD npm run start
