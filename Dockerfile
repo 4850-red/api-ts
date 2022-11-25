@@ -4,8 +4,8 @@ WORKDIR /opt/api
 
 COPY . .
 
-RUN apt-get update && apt-get install -y curl && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/* && npm install -g npm
+RUN sudo apt-get update && sudo apt-get install -y curl && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && sudo apt-get install -y nodejs && rm -rf /var/lib/apt/lists/* && npm install -g npm
 
-RUN npm ci
+RUN sudo npm ci
 
 CMD npm run start
