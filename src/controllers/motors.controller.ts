@@ -75,16 +75,18 @@ class MotorsController {
   }
 
   private convertMotorPosition = (motor: Motor, newPosition: string) => {
+    
+    // converts string input to a number
     let smartPosition: number = Number(newPosition)
-    let div = motor.inverted ? motor.max : motor.min
-    smartPosition = motor.inverted ? 100-smartPosition : smartPosition
-    let rawPosition = smartPosition/div * 254
+    // rounds up/down accordingly
+    if (smartPosition < 1) smartPosition = 1
+    if (smartPosition > 100) smartPosition = 100
+
+    let rawPosition = smartPosition * (100/motor.max)
 
     console.table({
       newPosition: newPosition,
       inverted: motor.inverted,
-      div: div,
-      smartPosition: smartPosition,
       rawPosition: rawPosition
     })
 
