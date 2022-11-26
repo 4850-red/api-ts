@@ -54,28 +54,16 @@ class MotorsController {
         torqlevel: 1
       }
 
-      let motorMsg2 = {
-        id: 5,
-        pos: 500,
-        torqlevel: 1
-      }
+      // this.client.sendRequest(
+      //   {
+      //   positions: [
+      //     motorMsg, motorMsg2, motorMsg3
+      //   ]
+      //   }, (response) => {
+      //     console.log(response)
+      //   })
 
-      let motorMsg3 = {
-        id: 10,
-        pos: 100,
-        torqlevel: 1
-      }
-
-      this.client.sendRequest(
-        {
-        positions: [
-          motorMsg, motorMsg2, motorMsg3
-        ]
-        }, (response) => {
-          console.log(response)
-        })
-
-      // this.pub.publish(motorMsg)
+      this.pub.publish(motorMsg)
       this.node.spinOnce()
 
       res.status(200).json({ data: findOneMotorData, message: 'findOne' , smile: newMotorPos})
