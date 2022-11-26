@@ -38,7 +38,6 @@ class App {
       console.log(url)
     })
 
-
   }
 
   public getServer() {
