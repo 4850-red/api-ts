@@ -45,8 +45,9 @@ class MotorsController {
   public setMotorPosition = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const motorId = Number(req.params.id)
-      const newMotorPos = Number(req.params.position)
       const findOneMotorData: Motor = await this.motorService.findMotorById(motorId)
+      const smartPosition = req.params.position
+      const newMotorPos = this.convertMotorPosition(findOneMotorData, smartPosition)
       
       let motorMsg = {
         id: motorId,
@@ -63,14 +64,31 @@ class MotorsController {
       //     console.log(response)
       //   })
 
-      this.pub.publish(motorMsg)
-      this.node.spinOnce()
+      // this.pub.publish(motorMsg)
+      // this.node.spinOnce()
 
-      res.status(200).json({ data: findOneMotorData, message: 'findOne' , smile: newMotorPos})
+      res.status(200).json({ data: findOneMotorData, message: 'setMotorPos', smartPosition: smartPosition, rawPosition: newMotorPos})
 
     } catch (error) {
       next(error)
     }
+  }
+
+  private convertMotorPosition = (motor: Motor, newPosition: string) => {
+    let smartPosition: number = Number(newPosition)
+    let div = motor.inverted ? motor.max : motor.min
+    smartPosition = motor.inverted ? smartPosition : 100-smartPosition
+    let rawPosition = smartPosition/div * 254
+
+    console.table({
+      newPosition: newPosition,
+      div: div,
+      smartPosition: smartPosition,
+      rawPosition: rawPosition
+    })
+
+    return rawPosition
+
   }
 }
 
