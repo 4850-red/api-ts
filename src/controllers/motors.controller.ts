@@ -84,15 +84,7 @@ class MotorsController {
     if (smartPosition > 100) smartPosition = 100
 
     let rawPosition = Math.round(smartPosition * (motor.max/100))
-
-    console.table({
-      newPosition: newPosition,
-      smartPosition: smartPosition,
-      rawPosition: rawPosition,
-      min: motor.min,
-      max: motor.max
-    })
-
+    
     return rawPosition
 
   }
