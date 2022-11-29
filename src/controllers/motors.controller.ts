@@ -14,6 +14,9 @@ class MotorsController {
   public pub: Publisher<any>
   public client: Client<any>
 
+  public torqMin: 0 // higher torq
+  public torqMax: 4 // lower torq
+
   // gets node/publisher from route
   constructor(node: Node, pub: Publisher<any>, client: Client<any>){
     this.node = node
@@ -21,38 +24,64 @@ class MotorsController {
     this.client = client
   }
 
-  public getMotors = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public handler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    let id = Number(req.params.id)
+    let position = Number(req.params.pos) || Number(req.params.position)
+    let torq = Number(req.params.torq) || Number(req.params.torque)
+
+    // get all motors
+    // - id doesnt exist
+    // - ignores if position and torq exist
+    if(id == undefined) return this.getMotors(res, next)
+
+    // get motor info by id
+    // - only id exists
+    // - position and torq dont exist
+    if(position == undefined && torq == undefined) return this.getMotorById(id, res, next)
+
+    // sets motor position
+    // - id exists
+    // - position exists
+    // - torq optional
+    if(position != undefined) {
+      // - torq exist
+      if(torq !== undefined) {
+        if(torq < this.torqMin) torq = this.torqMin
+        if(torq > this.torqMax) torq = this.torqMax
+      } else torq = 0
+      return this.setMotorPosition(id, position, torq, res, next)
+    }
+  }
+
+  public getMotors = async (res: Response, next: NextFunction): Promise<void> => {
     try {
       const findAllMotorsData: Motor[] = await this.motorService.findAllMotors();
 
-      res.status(200).json({ data: findAllMotorsData, message: 'findAll' });
+      res.status(200).json({ data: findAllMotorsData, message: 'getAllMotors' });
     } catch (error) {
       next(error);
     }
   };
 
-  public getMotorById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getMotorById = async (motorId: number, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const motorId = Number(req.params.id)
       const findOneMotorData: Motor = await this.motorService.findMotorById(motorId)
 
-      res.status(200).json({ data: findOneMotorData, message: 'findOne' })
+      res.status(200).json({ data: findOneMotorData, message: 'getMotorInfo' })
     } catch (error) {
       next(error)
     }
   }
 
-  public setMotorPosition = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public setMotorPosition = async (motorId: number, newPosition: number, torq: number, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const motorId = Number(req.params.id)
       const findOneMotorData: Motor = await this.motorService.findMotorById(motorId)
-      const smartPosition = req.params.position
-      const newMotorPos = this.convertMotorPosition(findOneMotorData, smartPosition)
+      newPosition = this.convertMotorPosition(findOneMotorData, newPosition)
       
       let motorMsg = {
         id: motorId,
-        pos: newMotorPos,
-        torqlevel: 1
+        pos: newPosition,
+        torqlevel: torq
       }
 
       // this.client.sendRequest(
@@ -67,25 +96,20 @@ class MotorsController {
       // this.pub.publish(motorMsg)
       // this.node.spinOnce()
 
-      res.status(200).json({ data: findOneMotorData, message: 'setMotorPos', smartPosition: smartPosition, rawPosition: newMotorPos})
+      res.status(200).json({ data: findOneMotorData, message: 'setMotorPos', oldPosition: findOneMotorData.position, newPosition: newPosition})
 
     } catch (error) {
       next(error)
     }
   }
 
-  private convertMotorPosition = (motor: Motor, newPosition: string) => {
-    
-    // converts string input to a number
-    let smartPosition: number = Number(newPosition)
-    
-    // rounds up/down accordingly
-    if (smartPosition < 1) smartPosition = 1
-    if (smartPosition > 100) smartPosition = 100
+  private convertMotorPosition = (motor: Motor, newPosition: number) => {
 
-    let rawPosition = Math.round(smartPosition * (motor.max/100))
-    
-    return rawPosition
+    // rounds up/down accordingly
+    if (newPosition < motor.min) newPosition = motor.min
+    if (newPosition > motor.max) newPosition = motor.max
+
+    return newPosition
 
   }
 }

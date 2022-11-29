@@ -6,7 +6,6 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import ip from 'ip'
-import qrcode from 'qrcode'
 
 class App {
   public app: express.Application;
@@ -31,12 +30,6 @@ class App {
       logger.info(`API Listening on http://${ip.address()}:${this.port}`)
       logger.info(`=======================================`)
     });
-
-    let apiURL = `http://${ip.address()}:${this.port}/demo`
-  
-    qrcode.toDataURL(apiURL, function (err, url) {
-      console.log(url)
-    })
 
   }
 
