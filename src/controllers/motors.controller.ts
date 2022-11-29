@@ -103,8 +103,8 @@ class MotorsController {
       //     console.log(response)
       //   })
 
-      // this.pub.publish(motorMsg)
-      // this.node.spinOnce()
+      this.pub.publish(motorMsg)
+      this.node.spinOnce()
 
       let oldPosition = findOneMotorData.position
       this.motorService.updateMotorPos(motorId, newPosition)
