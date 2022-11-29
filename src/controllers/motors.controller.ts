@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Motor } from '@/interfaces/motor.interface';
 import MotorService from '@/services/motors.service'
 import { Publisher, Node, Client} from 'rclnodejs'
+import { Type } from 'class-transformer';
 
 class MotorsController {
 
@@ -25,27 +26,43 @@ class MotorsController {
   }
 
   public handler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    let id = Number(req.params.id)
-    let position = Number(req.params.pos) || Number(req.params.position)
-    let torq = Number(req.params.torq) || Number(req.params.torque)
+    let id: string | number = (req.params.id)
+    let position: string | number = (req.params.pos) || (req.params.position)
+    let torq: string | number = (req.params.torq) || (req.params.torque)
+
+    console.table({
+      id: id,
+      idType: typeof(id),
+      position: position,
+      positionType: typeof(position),
+      torq: torq,
+      torqType: typeof(torq)
+    })
 
     // get all motors
     // - id doesnt exist
     // - ignores if position and torq exist
-    if(id == undefined) return this.getMotors(res, next)
+    if(id == undefined) {
+      return this.getMotors(res, next)
+    }
 
+    id = Number(id)
     // get motor info by id
     // - only id exists
     // - position and torq dont exist
-    if(position == undefined && torq == undefined) return this.getMotorById(id, res, next)
+    if(position == undefined && torq == undefined){
+      return this.getMotorById(id, res, next)
+    } 
 
     // sets motor position
     // - id exists
     // - position exists
     // - torq optional
     if(position != undefined) {
+      position = Number(position)
       // - torq exist
       if(torq !== undefined) {
+        torq = Number(torq)
         if(torq < this.torqMin) torq = this.torqMin
         if(torq > this.torqMax) torq = this.torqMax
       } else torq = 0
