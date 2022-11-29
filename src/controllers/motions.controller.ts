@@ -34,13 +34,15 @@ class MotionsController {
 
       let motionRemocon: number = findOneMotionData.id
 
+      let motionMsg: object
+
       if(motionRemocon == 99) {
-        let motionMsg = {
+        motionMsg = {
           motion_name: findOneMotionData.name
         }
         this.pubName.publish(motionMsg)
       } else {
-        let motionMsg: object = {
+        motionMsg = {
           btn_code: motionRemocon
         }
         this.pubNum.publish(motionMsg)
@@ -48,7 +50,7 @@ class MotionsController {
 
       this.node.spinOnce()
 
-      res.status(200).json({ data: findOneMotionData, message: 'callMotion', motionRemocon: motionRemocon });
+      res.status(200).json({ data: findOneMotionData, message: 'callMotionById', motionMsg: motionMsg });
     } catch (error) {
       next(error);
     }
@@ -73,20 +75,22 @@ class MotionsController {
 
       let motionRemocon: number = findOneMotionData.id
 
+      let motionMsg: object
+
       if(motionRemocon == 99) {
-        let motionMsg = {
+        motionMsg = {
           motion_name: findOneMotionData.name
         }
         this.pubName.publish(motionMsg)
       } else {
-        let motionMsg: object = {
+        motionMsg = {
           btn_code: motionRemocon
         }
         this.pubNum.publish(motionMsg)
       }
       this.node.spinOnce()
 
-      res.status(200).json({ data: findOneMotionData, message: 'findOne' });
+      res.status(200).json({ data: findOneMotionData, message: 'callMotionByName', motionMsg: motionMsg});
     } catch (error) {
       next(error);
     }
