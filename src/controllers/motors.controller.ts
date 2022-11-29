@@ -96,6 +96,8 @@ class MotorsController {
       // this.pub.publish(motorMsg)
       // this.node.spinOnce()
 
+      this.motorService.updateMotorPos(motorId, newPosition)
+
       res.status(200).json({ data: findOneMotorData, message: 'setMotorPos', oldPosition: findOneMotorData.position, newPosition: newPosition})
 
     } catch (error) {

@@ -19,6 +19,12 @@ class MotorService {
 
     return findMotor;
   }
+
+  public async updateMotorPos(motorId: number, newMotorPos: number): Promise<void> {
+    const findMotor: Motor = this.motors.find(motor => motor.id === motorId);
+    findMotor.position = newMotorPos
+
+  }
 }
 
 export default MotorService;
