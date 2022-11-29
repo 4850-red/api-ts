@@ -15,8 +15,6 @@ class MotorsController {
   public pub: Publisher<any>
   public client: Client<any>
 
-  public torqMin: 0 // higher torq
-  public torqMax: 4 // lower torq
 
   // gets node/publisher from route
   constructor(node: Node, pub: Publisher<any>, client: Client<any>){
@@ -26,9 +24,15 @@ class MotorsController {
   }
 
   public handler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    let id: string | number = (req.params.id)
-    let position: string | number = (req.params.pos) || (req.params.position)
-    let torq: string | number = (req.params.torq) || (req.params.torque)
+
+    const torqMin = 0 // higher torq
+    const torqMax = 4 // lower torq
+
+    let id: any = (req.query.id)
+    let position: any = (req.query.pos) || (req.query.position)
+    let torq: any = (req.query.torq) || (req.query.torque)
+
+    
 
     console.table({
       id: id,
@@ -63,9 +67,15 @@ class MotorsController {
       // - torq exist
       if(torq !== undefined) {
         torq = Number(torq)
-        if(torq < this.torqMin) torq = this.torqMin
-        if(torq > this.torqMax) torq = this.torqMax
+        console.table({
+          torq: torq,
+          torqMin: torqMin,
+          torqMax: torqMax,
+        })
+        if(torq < torqMin) torq = torqMin
+        if(torq > torqMax) torq = torqMax
       } else torq = 0
+      console.log(`torq: ${torq}`)
       return this.setMotorPosition(id, position, torq, res, next)
     }
   }
@@ -101,6 +111,8 @@ class MotorsController {
         torqlevel: torq
       }
 
+      console.table(motorMsg)
+
       // this.client.sendRequest(
       //   {
       //   positions: [
@@ -113,9 +125,10 @@ class MotorsController {
       // this.pub.publish(motorMsg)
       // this.node.spinOnce()
 
+      let oldPosition = findOneMotorData.position
       this.motorService.updateMotorPos(motorId, newPosition)
 
-      res.status(200).json({ data: findOneMotorData, message: 'setMotorPos', oldPosition: findOneMotorData.position, newPosition: newPosition})
+      res.status(200).json({ data: findOneMotorData, message: 'setMotorPos', oldPosition: oldPosition, newPosition: newPosition, torq: torq})
 
     } catch (error) {
       next(error)
