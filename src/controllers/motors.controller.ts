@@ -32,17 +32,6 @@ class MotorsController {
     let position: any = (req.query.pos) || (req.query.position)
     let torq: any = (req.query.torq) || (req.query.torque)
 
-    
-
-    console.table({
-      id: id,
-      idType: typeof(id),
-      position: position,
-      positionType: typeof(position),
-      torq: torq,
-      torqType: typeof(torq)
-    })
-
     // get all motors
     // - id doesnt exist
     // - ignores if position and torq exist
@@ -67,15 +56,9 @@ class MotorsController {
       // - torq exist
       if(torq !== undefined) {
         torq = Number(torq)
-        console.table({
-          torq: torq,
-          torqMin: torqMin,
-          torqMax: torqMax,
-        })
         if(torq < torqMin) torq = torqMin
         if(torq > torqMax) torq = torqMax
       } else torq = 0
-      console.log(`torq: ${torq}`)
       return this.setMotorPosition(id, position, torq, res, next)
     }
   }
@@ -110,8 +93,6 @@ class MotorsController {
         pos: newPosition,
         torqlevel: torq
       }
-
-      console.table(motorMsg)
 
       // this.client.sendRequest(
       //   {
