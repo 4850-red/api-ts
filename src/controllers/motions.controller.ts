@@ -11,7 +11,7 @@ class MotionsController {
 
   constructor(node: Node, pubNum: Publisher<any>, pubName: Publisher<any>) {
     this.pubNum = pubNum
-    this.pubName = this.pubName
+    this.pubName = pubName
     this.node = node
   }
 
