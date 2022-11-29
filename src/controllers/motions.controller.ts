@@ -6,10 +6,12 @@ import { Publisher, Node} from 'rclnodejs'
 class MotionsController {
 
   public node: Node
-  public pub: Publisher<any>
+  public pubNum: Publisher<any>
+  public pubName: Publisher<any>
 
-  constructor(node: Node, pub: Publisher<any>) {
-    this.pub = pub
+  constructor(node: Node, pubNum: Publisher<any>, pubName: Publisher<any>) {
+    this.pubNum = pubNum
+    this.pubName = this.pubName
     this.node = node
   }
 
@@ -30,16 +32,23 @@ class MotionsController {
       const motionId = Number(req.params.key);
       const findOneMotionData: Motion = await this.motionService.findMotionById(motionId);
 
-      let motionName: String = findOneMotionData.name
+      let motionRemocon: number = findOneMotionData.id
 
-      let motionMsg = {
-        motion_name: motionName
+      if(motionRemocon == 99) {
+        let motionMsg = {
+          motion_name: findOneMotionData.name
+        }
+        this.pubName.publish(motionMsg)
+      } else {
+        let motionMsg: object = {
+          btn_code: motionRemocon
+        }
+        this.pubNum.publish(motionMsg)
       }
 
-      this.pub.publish(motionMsg)
       this.node.spinOnce()
 
-      res.status(200).json({ data: findOneMotionData, message: 'findOne' });
+      res.status(200).json({ data: findOneMotionData, message: 'callMotion', motionRemocon: motionRemocon });
     } catch (error) {
       next(error);
     }
@@ -62,11 +71,19 @@ class MotionsController {
       let motionName: String = req.params.key;
       const findOneMotionData: Motion = await this.motionService.findMotionByName(motionName);
 
-      let motionMsg = {
-        motion_name: motionName
-      }
+      let motionRemocon: number = findOneMotionData.id
 
-      this.pub.publish(motionMsg)
+      if(motionRemocon == 99) {
+        let motionMsg = {
+          motion_name: findOneMotionData.name
+        }
+        this.pubName.publish(motionMsg)
+      } else {
+        let motionMsg: object = {
+          btn_code: motionRemocon
+        }
+        this.pubNum.publish(motionMsg)
+      }
       this.node.spinOnce()
 
       res.status(200).json({ data: findOneMotionData, message: 'findOne' });

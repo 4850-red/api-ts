@@ -12,13 +12,17 @@ const nodeName = 'api_node'
 var node: Node
 
 var motorPublisher: Publisher<any>
-var motionPublisher: Publisher<any>
+var motionNumPublisher: Publisher<any>
+var motionNamePublisher: Publisher<any>
 
 const motorMsgType: MessageType<any> = 'uxa_sam_msgs/msg/PositionMove'
 const motorTopic = 'uxa_sam_driver/position_move'
 
-const motionMsgType: MessageType<any> = 'uxa_uic_msgs/msg/Motion'
-const motionTopic = 'uic_driver_motion'
+const motionNumMsgType: MessageType<any> = 'uxa_uic_msgs/msg/Remocon'
+const motionNumTopic = 'uic_driver_remocon'
+
+const motionNameMsgType: MessageType<any> = 'uxa_uic_msgs/msg/Motion'
+const motionNameTopic = 'uic_driver_motion'
 
 var motorClient: Client<any>
 
@@ -39,7 +43,8 @@ rclnodejs.init()
 
   // creates motor publisher
   motorPublisher = node.createPublisher(motorMsgType, motorTopic)
-  motionPublisher = node.createPublisher(motionMsgType, motionTopic)
+  motionNumPublisher = node.createPublisher(motionNumMsgType, motionNumTopic)
+  motionNamePublisher = node.createPublisher(motionNameMsgType, motionNameTopic)
 
   motorClient = node.createClient(motorServiceMap, motorServiceName)
 
@@ -52,7 +57,7 @@ rclnodejs.init()
   console.error(err)
 }).then(() => {
   try {
-    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher, motorClient), new MotionsRoute(node, motionPublisher), new DemoRoute()]);
+    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher, motorClient), new MotionsRoute(node, motionNumPublisher, motionNamePublisher), new DemoRoute()]);
     app.listen();
   } catch(e) {
     console.error(e)
