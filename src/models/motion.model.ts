@@ -9,7 +9,7 @@ const motionModel: Motion[] = [
   { id: 4, name: 'walk_forward_short', button: 'U' },
   { id: 5, name: 'turn_right', button: 'RR' },
   { id: 6, name: 'walk_left', button: 'L' },
-  { id: 7, name: 'initialize', button: 'S'},
+  { id: 7, name: 'init/stop', button: 'S'},
   { id: 8, name: 'walk_right', button: 'R' },
   { id: 9, name: 'walk_foward_4step', button: 'LA' },
   { id: 10, name: 'basic_motion', button: 'D' },

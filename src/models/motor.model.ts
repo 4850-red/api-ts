@@ -37,7 +37,7 @@ const motorModel: Motor[] = [
   { id: 19, name: 'right-elbow', description: 'min is up', position: 210, min: 65, max: 210, default: 210, inverted: false },
 
   // waist
-  { id: 22, name: 'hip', description: 'rotate left/right', position: 127, min: 90, max: 170, default: 127, inverted: false },
+  { id: 22, name: 'hip', description: 'rotate left/right', position: 127, min: 95, max: 165, default: 127, inverted: false },
 
   // neck
   { id: 23, name: 'neck', description: 'look left/right', position: 127, min: 1, max: 254, default: 127, inverted: false },
