@@ -13,14 +13,11 @@ class MotorsController {
   // Publisher: Motor
   public node: Node
   public pub: Publisher<any>
-  public client: Client<any>
-
 
   // gets node/publisher from route
-  constructor(node: Node, pub: Publisher<any>, client: Client<any>){
+  constructor(node: Node, pub: Publisher<any>){
     this.node = node
     this.pub = pub
-    this.client = client
   }
 
   public handler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -93,15 +90,6 @@ class MotorsController {
         pos: newPosition,
         torqlevel: torq
       }
-
-      // this.client.sendRequest(
-      //   {
-      //   positions: [
-      //     motorMsg, motorMsg2, motorMsg3
-      //   ]
-      //   }, (response) => {
-      //     console.log(response)
-      //   })
 
       this.pub.publish(motorMsg)
       this.node.spinOnce()

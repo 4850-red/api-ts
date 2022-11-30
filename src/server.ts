@@ -2,6 +2,7 @@ import App from '@/app';
 import IndexRoute from '@routes/index.route';
 import MotorsRoute from '@routes/motors.route';
 import MotionsRoute from '@routes/motions.route';
+import MultiMotorRoute from '@/routes/multi.motors.route'
 import validateEnv from '@utils/validateEnv';
 import DemoRoute from './routes/demo.route';
 validateEnv();
@@ -57,7 +58,7 @@ rclnodejs.init()
   console.error(err)
 }).then(() => {
   try {
-    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher, motorClient), new MotionsRoute(node, motionNumPublisher, motionNamePublisher), new DemoRoute()]);
+    const app = new App([new IndexRoute(), new MotorsRoute(node, motorPublisher), new MotionsRoute(node, motionNumPublisher, motionNamePublisher), new DemoRoute(), new MultiMotorRoute(node, motorClient)]);
     app.listen();
   } catch(e) {
     console.error(e)

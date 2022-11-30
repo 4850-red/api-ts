@@ -1,22 +1,22 @@
 import { Router } from 'express';
-import MotorsController from '@/controllers/motors.controller';
+import MultiMotorsController from '@/controllers/multi.motors.controller';
 import { Routes } from '@interfaces/routes.interface';
 import { Publisher, Node, Client} from 'rclnodejs'
 
 class MotorsRoute implements Routes {
-  public path = '/motor';
+  public path = '/multimotor';
   public router = Router();
-  public motorsController: MotorsController
+  public multiMotorsController: MultiMotorsController
 
   // sets up routes and controllers
   // gets ROS2 node/publisher from server
-  constructor(node: Node, pub: Publisher<any>) {
-    this.motorsController = new MotorsController(node, pub);
+  constructor(node: Node, client: Client<any>) {
+    this.multiMotorsController = new MultiMotorsController(node, client);
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.motorsController.handler);
+    this.router.get(`${this.path}`, this.multiMotorsController.handler);
   }
 }
 
