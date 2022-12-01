@@ -25,16 +25,16 @@ const motorModel: Motor[] = [
   // shoulder
   { id: 12, name: 'left-upper-shoulder', description: '', position: 180, min: 10, max: 254, default: 180, inverted: true },
   { id: 13, name: 'right-upper-shoulder', description: '', position: 180, min: 1, max: 254, default: 180, inverted: false },
-  { id: 14, name: 'left-lower-shoulder', description: '', position: 115, min: 1, max: 120, default: 115, inverted: true },
-  { id: 15, name: 'right-lower-shoulder', description: '', position: 138, min: 130, max: 254, default: 138, inverted: false },
+  { id: 14, name: 'left-lower-shoulder', description: '', position: 115, min: 135, max: 254, default: 135, inverted: false },
+  { id: 15, name: 'right-lower-shoulder', description: '', position: 138, min: 1, max: 120, default: 120, inverted: true },
 
   // bicep
   { id: 16, name: 'left-bicep', description: 'twist in', position: 127, min: 1, max: 254, default: 127, inverted: true },
   { id: 17, name: 'right-arm', description: 'twist in', position: 127, min: 1, max: 254, default: 127, inverted: false },
 
   // elbow
-  { id: 18, name: 'left-eblow', description: 'max is up', position: 48, min: 48, max: 190, default: 48, inverted: true },
-  { id: 19, name: 'right-elbow', description: 'min is up', position: 210, min: 65, max: 210, default: 210, inverted: false },
+  { id: 18, name: 'left-eblow', description: 'max is up', position: 210, min: 75, max: 210, default: 210, inverted: true },
+  { id: 19, name: 'right-elbow', description: 'min is up', position: 40, min: 40, max: 180, default: 40, inverted: false },
 
   // waist
   { id: 22, name: 'hip', description: 'rotate left/right', position: 127, min: 95, max: 165, default: 127, inverted: false },
@@ -43,7 +43,7 @@ const motorModel: Motor[] = [
   { id: 23, name: 'neck', description: 'look left/right', position: 127, min: 1, max: 254, default: 127, inverted: false },
 
   // head 
-  { id: 24, name: 'head', description: 'look up/down', position: 127, min: 70, max: 160, default: 127, inverted: false },
+  { id: 24, name: 'head', description: 'look up/down', position: 127, min: 100, max: 160, default: 127, inverted: false },
 ];
 
 export default motorModel;
